@@ -103,13 +103,20 @@ export default defineNuxtConfig({
   // Hooks pour le déploiement
   hooks: {
     'prerender:routes'(ctx) {
-      ctx.routes = ctx.routes.filter(
-        (route) =>
-          ![
-            '/blog/tendances-marketing-digital',
-            '/blog/optimisation-conversion',
-          ].includes(route)
-      );
+      if (ctx.routes instanceof Set) {
+        // Conversion du Set en tableau, filtrage, puis reconversion en Set
+        ctx.routes = new Set(
+          [...ctx.routes].filter(
+            (route) =>
+              ![
+                '/blog/tendances-marketing-digital',
+                '/blog/optimisation-conversion',
+              ].includes(route)
+          )
+        );
+      } else {
+        console.error('ctx.routes n\'est pas un Set.');
+      }
     },
   },
 });
